@@ -252,30 +252,38 @@
             </div>
 
 
-            <!-- Lists -->
-            <div class="row">
-                <!-- 备选卡牌 -->
-                <div class="col-md-6" style="min-height: 200px;">
-                    <h4>备选卡牌</h4>
-                    <div class="card-list-container">
-                        <select id="cardList" class="form-select" size="12">
-                            <!-- Display cards here -->
-                        </select>
-                    </div>
-                </div>
 
-                <!-- 当前卡牌 -->
-                <div class="col-md-6" style="min-height: 200px;">
-                    <h4>当前卡牌</h4>
-                    <div class="card-list-container">
-                        <select id="deckList" class="form-select" size="12">
-                            <!-- Display deck cards here -->
-                        </select>
+            <div class="layui-form-item">
+                <div id="small-world">
+                    <div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-1">
+                        <div class="layui-transfer-box" data-index="0" style="width: 200px; height: 360px;">
+                            <div class="layui-transfer-header"><input type="checkbox" name="layTransferLeftCheckAll"
+                                    lay-filter="layTransferCheckbox" lay-type="all" lay-skin="primary" title="备选卡牌">
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>备选卡牌</span><i
+                                        class="layui-icon layui-icon-ok"></i></div>
+                            </div>
+                            <ul class="layui-transfer-data" style="height: 320px;">
+                                <p class="layui-none">无数据</p>
+                            </ul>
+                        </div>
+                        <div class="layui-transfer-active" style="width: 5%"><button type="button"
+                                class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0"><i
+                                    class="layui-icon layui-icon-next"></i></button><button type="button"
+                                class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="1"><i
+                                    class="layui-icon layui-icon-prev"></i></button></div>
+                        <div class="layui-transfer-box" data-index="1" style="width: 200px; height: 360px;">
+                            <div class="layui-transfer-header"><input type="checkbox" name="layTransferRightCheckAll"
+                                    lay-filter="layTransferCheckbox" lay-type="all" lay-skin="primary" title="当前卡组">
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><span>当前卡组</span><i
+                                        class="layui-icon layui-icon-ok"></i></div>
+                            </div>
+                            <ul class="layui-transfer-data" style="height: 320px;">
+                                <p class="layui-none">无数据</p>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
 
 
         </div>

@@ -16,41 +16,37 @@ let deck_source = {
     "working": {
     }
 }
-function refresh_init_ui() {
-    var deckList = document.getElementById('deckList');
-    // 清空已有选项
-    while (deckList.options.length > 0) {
-        deckList.remove(0);
-    }
-    var cardList = document.getElementById('cardList');
-    // 清空已有选项
-    while (cardList.options.length > 0) {
-        cardList.remove(0);
-    }
+// function refresh_init_ui() {
+//     var deckList = document.getElementById('deckList');
+//     // 清空已有选项
+//     while (deckList.options.length > 0) {
+//         deckList.remove(0);
+//     }
+//     var cardList = document.getElementById('cardList');
+//     // 清空已有选项
+//     while (cardList.options.length > 0) {
+//         cardList.remove(0);
+//     }
 
-    var buff = Object.entries(deck_source.buffer);
-    for (var i = 0; i < buff.length; i++) {
-        // Create a new option element
-        var newOption = document.createElement("option");
-        newOption.textContent = buff[i][0];
-        cardList.appendChild(newOption);
-    }
-    var working = Object.entries(deck_source.working);
-    for (var i = 0; i < working.length; i++) {
-        // Create a new option element
-        var newOption = document.createElement("option");
-        newOption.textContent = working[i][0];
-        deckList.appendChild(newOption);
-    }
+//     var buff = Object.entries(deck_source.buffer);
+//     for (var i = 0; i < buff.length; i++) {
+//         // Create a new option element
+//         var newOption = document.createElement("option");
+//         newOption.textContent = buff[i][0];
+//         cardList.appendChild(newOption);
+//     }
+//     var working = Object.entries(deck_source.working);
+//     for (var i = 0; i < working.length; i++) {
+//         // Create a new option element
+//         var newOption = document.createElement("option");
+//         newOption.textContent = working[i][0];
+//         deckList.appendChild(newOption);
+//     }
 
-}
+// }
 
 function refresh_begin() {
-    // 遍历全部选项值
-    var deckList = document.getElementById("deckList");
-    var cardList = document.getElementById('cardList');
     var beginlist = document.getElementById('beginCard');
-    var endlist = document.getElementById('endCard');
     // 清空已有选项
     while (beginlist.options.length > 0) {
         beginlist.remove(0);
@@ -58,15 +54,27 @@ function refresh_begin() {
     var newOption = document.createElement("option");
     newOption.textContent = '（选择起始卡牌）';
     document.getElementById('beginCard').appendChild(newOption);
-    for (var i = 0; i < deckList.options.length; i++) {
-        var optionValue = deckList.options[i].value;
+
+    var working = Object.entries(deck_source.working);
+    for (var i = 0; i < working.length; i++) {
+        // Create a new option element
         var newOption = document.createElement("option");
-        newOption.textContent = optionValue;
-        document.getElementById('beginCard').appendChild(newOption);
+        newOption.textContent = working[i][0];
+        beginlist.appendChild(newOption);
     }
 
 }
-
+function nomonster() {
+    // 遍历全部选项值
+    var endlist = document.getElementById('endCard');
+    // 清空已有选项
+    while (endlist.options.length > 0) {
+        endlist.remove(0);
+    }
+    var newOption = document.createElement("option");
+    newOption.textContent = "（没有怪兽）";
+    document.getElementById('endCard').appendChild(newOption);
+}
 function refresh_end(tree_data) {
     // 遍历全部选项值
     var endlist = document.getElementById('endCard');
@@ -103,73 +111,73 @@ function addCard() {
 }
 
 // 监听第一个列表的双击事件
-document.getElementById("cardList").addEventListener("dblclick", function () {
-    var cardList = document.getElementById("cardList");
-    // 获取选中的值
-    var selectedValue = cardList.value;
+// document.getElementById("cardList").addEventListener("dblclick", function () {
+//     var cardList = document.getElementById("cardList");
+//     // 获取选中的值
+//     var selectedValue = cardList.value;
 
-    var deckList = document.getElementById('deckList');
-    // 创建新的选项元素并添加到右边列表中
-    var newOption = document.createElement("option");
-    newOption.value = selectedValue;
-    newOption.text = selectedValue;
-    deckList.appendChild(newOption);
+//     var deckList = document.getElementById('deckList');
+//     // 创建新的选项元素并添加到右边列表中
+//     var newOption = document.createElement("option");
+//     newOption.value = selectedValue;
+//     newOption.text = selectedValue;
+//     deckList.appendChild(newOption);
 
-    // 获取选中的选项
-    var selectedOptions = Array.from(cardList.selectedOptions);
+//     // 获取选中的选项
+//     var selectedOptions = Array.from(cardList.selectedOptions);
 
-    // 逐个移除选中的选项
-    selectedOptions.forEach(function (option) {
-        cardList.remove(option.index);
-    });
-    if (deck_source.buffer.hasOwnProperty(selectedValue)) {
-        deck_source.working[selectedValue] = deck_source.buffer[selectedValue];
-        delete deck_source.buffer[selectedValue];
-    }
-    refresh_begin();
-    layui.$('#world_result').css('display', 'none');
-    searchCards(1);
-});
+//     // 逐个移除选中的选项
+//     selectedOptions.forEach(function (option) {
+//         cardList.remove(option.index);
+//     });
+//     if (deck_source.buffer.hasOwnProperty(selectedValue)) {
+//         deck_source.working[selectedValue] = deck_source.buffer[selectedValue];
+//         delete deck_source.buffer[selectedValue];
+//     }
+//     refresh_begin();
+//     layui.$('#world_result').css('display', 'none');
+//     searchCards(1);
+// });
 
 // 监听第一个列表的点击事件
-document.getElementById("cardList").addEventListener("click", function () {
-    // 取消第二个列表的选中项
-    document.getElementById("deckList").selectedIndex = -1;
-});
+// document.getElementById("cardList").addEventListener("click", function () {
+//     // 取消第二个列表的选中项
+//     document.getElementById("deckList").selectedIndex = -1;
+// });
 
 // 监听第二个列表的双击事件
-document.getElementById("deckList").addEventListener("dblclick", function () {
-    var deckList = document.getElementById("deckList");
-    // 获取选中的值
-    var selectedValue = deckList.value;
+// document.getElementById("deckList").addEventListener("dblclick", function () {
+//     var deckList = document.getElementById("deckList");
+//     // 获取选中的值
+//     var selectedValue = deckList.value;
 
-    var cardList = document.getElementById('cardList');
-    // 创建新的选项元素并添加到右边列表中
-    var newOption = document.createElement("option");
-    newOption.value = selectedValue;
-    newOption.text = selectedValue;
-    cardList.appendChild(newOption);
-    // 获取选中的选项
-    var selectedOptions = Array.from(deckList.selectedOptions);
+//     var cardList = document.getElementById('cardList');
+//     // 创建新的选项元素并添加到右边列表中
+//     var newOption = document.createElement("option");
+//     newOption.value = selectedValue;
+//     newOption.text = selectedValue;
+//     cardList.appendChild(newOption);
+//     // 获取选中的选项
+//     var selectedOptions = Array.from(deckList.selectedOptions);
 
-    // 逐个移除选中的选项
-    selectedOptions.forEach(function (option) {
-        deckList.remove(option.index);
-    });
-    if (deck_source.working.hasOwnProperty(selectedValue)) {
-        deck_source.buffer[selectedValue] = deck_source.working[selectedValue];
-        delete deck_source.working[selectedValue];
-    }
-    refresh_begin();
-    layui.$('#world_result').css('display', 'none');
-    searchCards(1);
-});
+//     // 逐个移除选中的选项
+//     selectedOptions.forEach(function (option) {
+//         deckList.remove(option.index);
+//     });
+//     if (deck_source.working.hasOwnProperty(selectedValue)) {
+//         deck_source.buffer[selectedValue] = deck_source.working[selectedValue];
+//         delete deck_source.working[selectedValue];
+//     }
+//     refresh_begin();
+//     layui.$('#world_result').css('display', 'none');
+//     searchCards(1);
+// });
 
 // 监听第二个列表的点击事件
-document.getElementById("deckList").addEventListener("click", function () {
-    // 取消第二个列表的选中项
-    document.getElementById("cardList").selectedIndex = -1;
-});
+// document.getElementById("deckList").addEventListener("click", function () {
+//     // 取消第二个列表的选中项
+//     document.getElementById("cardList").selectedIndex = -1;
+// });
 
 var layerIndex;
 function importDeck() {
@@ -245,23 +253,31 @@ function show_card_info(cardInfo) {
 function viewCards() {
     var cardList = document.getElementById('cardList');
     var deckList = document.getElementById('deckList');
-    if (cardList.selectedIndex != -1) {
-        var selectedValue = cardList.value;
-        if (deck_source.buffer.hasOwnProperty(selectedValue)) {
-            show_card_info(deck_source.buffer[selectedValue]);
-        } else if (deck_source.working.hasOwnProperty(selectedValue)) {
-            show_card_info(deck_source.working[selectedValue]);
+    var card_name = $("#beginCard").val();
+    if (card_name != "（选择起始卡牌）") {
+        if (deck_source.buffer.hasOwnProperty(card_name)) {
+            show_card_info(deck_source.buffer[card_name]);
+        } else if (deck_source.working.hasOwnProperty(card_name)) {
+            show_card_info(deck_source.working[card_name]);
         }
+    }
+    // if (cardList.selectedIndex != -1) {
+    //     var selectedValue = cardList.value;
+    //     if (deck_source.buffer.hasOwnProperty(selectedValue)) {
+    //         show_card_info(deck_source.buffer[selectedValue]);
+    //     } else if (deck_source.working.hasOwnProperty(selectedValue)) {
+    //         show_card_info(deck_source.working[selectedValue]);
+    //     }
 
-    }
-    else if (deckList.selectedIndex != -1) {
-        var selectedValue = deckList.value;
-        if (deck_source.buffer.hasOwnProperty(selectedValue)) {
-            show_card_info(deck_source.buffer[selectedValue]);
-        } else if (deck_source.working.hasOwnProperty(selectedValue)) {
-            show_card_info(deck_source.working[selectedValue]);
-        }
-    }
+    // }
+    // else if (deckList.selectedIndex != -1) {
+    //     var selectedValue = deckList.value;
+    //     if (deck_source.buffer.hasOwnProperty(selectedValue)) {
+    //         show_card_info(deck_source.buffer[selectedValue]);
+    //     } else if (deck_source.working.hasOwnProperty(selectedValue)) {
+    //         show_card_info(deck_source.working[selectedValue]);
+    //     }
+    // }
 
 }
 
@@ -284,10 +300,10 @@ layui.use(function () {
         }
 
         // 重加载
-        refresh_init_ui();
         refresh_begin();
         layer.close(layerIndex);
         layui.$('#world_result').css('display', 'none');
+        transfer.reload('world_add_card_form', { data: source_to_data(), value: Object.keys(deck_source.working) });
         // layer.alert('导入成功！', {
         //     shadeClose: true
         // });
@@ -318,7 +334,6 @@ layui.use(function () {
         };
 
         // 重加载
-        refresh_init_ui();
         refresh_begin();
 
 
@@ -328,6 +343,40 @@ layui.use(function () {
 
         return false;
     });
+    var style1 = layui.$('#small-world').attr('style');
+
+    transfer.set({
+        width: '45%', // 所有穿梭框默认高度为自动
+        // …
+    });
+    // 渲染
+    transfer.render({
+        id: 'world_add_card_form',
+        elem: '#small-world',
+        style: style1,
+        title: ['备选卡牌', '当前卡组'],
+        data: source_to_data(),
+        // value: Object.keys(deck_source.working),
+
+        onchange: function (obj, index) {
+            for (let i = 0; i < obj.length; i++) {
+                let card_name = obj[i].value
+                if (index === 0) {
+                    // 从左至右
+                    deck_source.working[card_name] = deck_source.buffer[card_name]
+                    delete deck_source.buffer[card_name]
+                } else {
+                    // 从右至左
+                    deck_source.buffer[card_name] = deck_source.working[card_name]
+                    delete deck_source.working[card_name]
+                }
+            }
+            refresh_begin();
+            layui.$('#world_result').css('display', 'none');
+            searchCards(1);
+        }
+    });
+
 });
 
 function exportDeck() {
@@ -354,7 +403,7 @@ function searchCards(flag) {
     let end_name = "";
     if (flag == 2) {
         end_name = $("#endCard").val();
-        if (end_name === "（全部怪兽）") {
+        if (end_name === "（全部怪兽）" || end_name === "（没有怪兽）") {
             end_name = "";
         }
     }
@@ -403,10 +452,12 @@ function searchCards(flag) {
     }
 
     if (success_count === 0) {
-        layer.alert('无法检索目标卡牌!', {
-            icon: 2,
-            shadeClose: true
-        });
+        // layer.alert('无法检索目标卡牌!', {
+        //     icon: 2,
+        //     shadeClose: true
+        // });
+        nomonster();
+        layui.$('#world_result').css('display', 'none');
         return false;
     }
 
@@ -426,7 +477,7 @@ function searchCards(flag) {
             layui.$('#world_result').css('display', 'block');
         }
     }
-    else {
+    else{
         layui.$('#world_result').css('display', 'block');
     }
 };
@@ -487,7 +538,6 @@ function world_gather(obj) {
     return result;
 }
 
-refresh_init_ui();
 source_to_data();
 refresh_begin();
 refresh_end([]);
