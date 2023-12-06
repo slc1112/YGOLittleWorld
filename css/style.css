@@ -73,12 +73,3 @@
 .parent{
 	text-align: center;
 }
-
-@media (max-width: 768px) {  /* 适应手机屏幕宽度 */
-    select {
-        -webkit-appearance: menulist;  /* WebKit 浏览器 */
-        appearance: menulist;  /* 其他浏览器 */
-        position: relative;
-        z-index: 1;
-    }
-}
