@@ -1,873 +1,299 @@
 <!DOCTYPE html>
-{% load static %}
-<html>
+<html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Gogame</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
-	<!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"> -->
-	<link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet"> -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
 
-	<link rel="stylesheet" href="{% static 'assets/vendors/iconly/bold.css' %}">
+    <link rel="stylesheet" href="./vendors/iconly/bold.css">
 
-	<link rel="stylesheet" href="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
-	<link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
-	<link rel="stylesheet" href="{% static 'assets/css/app.css' %}">
+    <link rel="stylesheet" href="./vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="./vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="./css/app.css">
 
-	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-	<link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
-	<script src="{% static 'js/go.js' %}"></script>
-	<script src="{% static 'js/play.js' %}"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="shortcut icon" href="./images/dragon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./layui/css/layui.css">
+
+    <title>小世界检索计算器</title>
+    <style>
+        /* Add some basic styling here if needed */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        select,
+        button {
+            margin: 5px;
+        }
+    </style>
 </head>
 
 
 
-<body>
-	<div id="app">
-		<div id="sidebar" class="active">
-			<div class="sidebar-wrapper active">
-				<div class="sidebar-header">
-					<div class="d-flex justify-content-between">
-						<div class="logo">
-							<a href="../"><img src="{% static 'logo.png' %}" alt="Logo" srcset=""></a>
-						</div>
-						<div class="toggler">
-							<a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-						</div>
-					</div>
-				</div>
-				<div class="sidebar-menu">
-					<ul class="menu">
-						<li class="sidebar-title"></li>
+<div id="ID-test-layer-wrapper" style="display: none;">
+    <div style="padding:0px;">
+        <div class="layui-field-box">
+            <form class="layui-form layui-form-pane" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">卡牌名称</label>
+                    <div class="layui-input-inline">
+                        <input autocomplete="off" class="layui-input" lay-verify="required" name="world_name"
+                            placeholder="可填简写，如“圆神”" required="" type="text">
+                    </div>
+                </div>
 
-						<li class="sidebar-item" id="menu_1">
-							<a href='#' class='sidebar-link' onclick="free_fire()">
-								<i class="bi bi-grid-fill"></i>
-								<span>Open Practice</span>
-							</a>
-						</li>
-
-						<li class="sidebar-item" id="menu_2">
-							<a href='#' class='sidebar-link' onclick="sgf_mode()">
-								<i class="bi bi-stack"></i>
-								<span>Exercise Analysis</span>
-							</a>
-						</li>
-						<li class="sidebar-item" id="menu_3">
-							<a href='#' class='sidebar-link' onclick="homework_mode()">
-								<i class="bi bi-pen-fill"></i>
-								<span>Problem Solving</span>
-							</a>
-						</li>
-
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div id="main">
-			<header class="mb-3">
-				<div class="d-flex justify-content-between">
-					<a href="#" class="burger-btn d-block">
-
-						<i class="fs-4">Menu</i>
-					</a>
-					<div class="float-end">
-						<p>Crafted <span class="text-danger"><i class="bi bi-heart"></i></span> by <a href="#">SLC</a>
-						</p>
-					</div>
-				</div>
-
-			</header>
-			<h4 class="card-title" id="caption">&nbsp;</h4>
-			<div class="page-content">
-				<section class="row">
-					<div class="card">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="canvas-container">
-									<canvas id="weiqi" width="720" height="720"></canvas>
-									<canvas id="path" width="720" height="720"></canvas>
-								</div>
-							</div>
-							<div class="col-lg-4 scrollable" id="sgf_information">
-								<div class="card-body">
-								</div>
-							</div>
-							<div class="col-lg-2">
-								<div class="card-body" id="button_list">
-									<a id="open_sgf_button" class="btn btn-outline-primary col-12"
-										onclick="open_sgf()">Open File</a>
-									<a id="move_show" class="btn btn-outline-primary col-12" onclick="show_hind()">Show
-										Moves</a>
-									<a id="show_label_button" class="btn btn-outline-primary col-12"
-										onclick="show_label()">Show Label</a>
-									<a id="show_information" class="btn btn-outline-primary col-12"
-										onclick="show_information()">Show Nodes</a>
-									<a id="back_step_button" class="btn btn-outline-primary col-12"
-										onclick="back_step()">Go Back One</a>
-									<a id="restart_button" class="btn btn-outline-primary col-12"
-										onclick="restart_sgf()">Restart All</a>
-								</div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">等级</label>
+                    <div class="layui-input-inline">
+                        <select lay-search="" name="world_level">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                        </select>
+                        <div class="layui-form-select">
+                            <div class="layui-select-title"><input type="text" placeholder="请选择" value="1"
+                                    class="layui-input"><i class="layui-edge"></i></div>
+                            <dl class="layui-anim layui-anim-upbit">
+                                <dd lay-value="1" class="layui-this">1</dd>
+                                <dd lay-value="2" class="">2</dd>
+                                <dd lay-value="3" class="">3</dd>
+                                <dd lay-value="4" class="">4</dd>
+                                <dd lay-value="5" class="">5</dd>
+                                <dd lay-value="6" class="">6</dd>
+                                <dd lay-value="7" class="">7</dd>
+                                <dd lay-value="8" class="">8</dd>
+                                <dd lay-value="9" class="">9</dd>
+                                <dd lay-value="10" class="">10</dd>
+                                <dd lay-value="11" class="">11</dd>
+                                <dd lay-value="12" class="">12</dd>
+                                <dd lay-value="13" class="">13</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
 
 
-								<div class="card-body" id="change_sgf_card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">属性</label>
+                    <div class="layui-input-inline">
+                        <select lay-verify="required" name="world_stats">
+                            <option value="暗">暗</option>
+                            <option value="光">光</option>
+                            <option value="地">地</option>
+                            <option value="水">水</option>
+                            <option value="炎">炎</option>
+                            <option value="风">风</option>
+                            <option value="神">神</option>
+                        </select>
+                        <div class="layui-unselect layui-form-select">
+                            <div class="layui-select-title"><input type="text" placeholder="请选择" value="暗" readonly=""
+                                    class="layui-input layui-unselect"><i class="layui-edge"></i></div>
+                            <dl class="layui-anim layui-anim-upbit">
+                                <dd lay-value="暗" class="layui-this">暗</dd>
+                                <dd lay-value="光" class="">光</dd>
+                                <dd lay-value="地" class="">地</dd>
+                                <dd lay-value="水" class="">水</dd>
+                                <dd lay-value="炎" class="">炎</dd>
+                                <dd lay-value="风" class="">风</dd>
+                                <dd lay-value="神" class="">神</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
 
-									<h5 class="card-title" id="sgf_filename"></h5>
-									<h5 class="card-title" id="total_info"></h5>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">种族</label>
+                    <div class="layui-input-inline">
+                        <select lay-search="" name="world_race">
+                            <option value="战士族">战士族</option>
+                            <option value="魔法师族">魔法师族</option>
+                            <option value="龙族">龙族</option>
+                            <option value="电子界族">电子界族</option>
+                            <option value="机械族">机械族</option>
+                            <option value="天使族">天使族</option>
+                            <option value="恶魔族">恶魔族</option>
+                            <option value="兽战士族">兽战士族</option>
+                            <option value="兽族">兽族</option>
+                            <option value="鸟兽族">鸟兽族</option>
+                            <option value="岩石族">岩石族</option>
+                            <option value="水族">水族</option>
+                            <option value="不死族">不死族</option>
+                            <option value="昆虫族">昆虫族</option>
+                            <option value="恐龙族">恐龙族</option>
+                            <option value="爬虫类族">爬虫类族</option>
+                            <option value="鱼族">鱼族</option>
+                            <option value="海龙族">海龙族</option>
+                            <option value="炎族">炎族</option>
+                            <option value="雷族">雷族</option>
+                            <option value="植物族">植物族</option>
+                            <option value="念动力族">念动力族</option>
+                            <option value="幻神兽族">幻神兽族</option>
+                            <option value="创造神族">创造神族</option>
+                            <option value="幻龙族">幻龙族</option>
+                            <option value="幻想魔族">幻想魔族</option>
+                        </select>
+                        <div class="layui-form-select">
+                            <div class="layui-select-title"><input type="text" placeholder="请选择" value="战士族"
+                                    class="layui-input"><i class="layui-edge"></i></div>
+                            <dl class="layui-anim layui-anim-upbit">
+                                <dd lay-value="战士族" class="layui-this">战士族</dd>
+                                <dd lay-value="魔法师族" class="">魔法师族</dd>
+                                <dd lay-value="龙族" class="">龙族</dd>
+                                <dd lay-value="电子界族" class="">电子界族</dd>
+                                <dd lay-value="机械族" class="">机械族</dd>
+                                <dd lay-value="天使族" class="">天使族</dd>
+                                <dd lay-value="恶魔族" class="">恶魔族</dd>
+                                <dd lay-value="兽战士族" class="">兽战士族</dd>
+                                <dd lay-value="兽族" class="">兽族</dd>
+                                <dd lay-value="鸟兽族" class="">鸟兽族</dd>
+                                <dd lay-value="岩石族" class="">岩石族</dd>
+                                <dd lay-value="水族" class="">水族</dd>
+                                <dd lay-value="不死族" class="">不死族</dd>
+                                <dd lay-value="昆虫族" class="">昆虫族</dd>
+                                <dd lay-value="恐龙族" class="">恐龙族</dd>
+                                <dd lay-value="爬虫类族" class="">爬虫类族</dd>
+                                <dd lay-value="鱼族" class="">鱼族</dd>
+                                <dd lay-value="海龙族" class="">海龙族</dd>
+                                <dd lay-value="炎族" class="">炎族</dd>
+                                <dd lay-value="雷族" class="">雷族</dd>
+                                <dd lay-value="植物族" class="">植物族</dd>
+                                <dd lay-value="念动力族" class="">念动力族</dd>
+                                <dd lay-value="幻神兽族" class="">幻神兽族</dd>
+                                <dd lay-value="创造神族" class="">创造神族</dd>
+                                <dd lay-value="幻龙族" class="">幻龙族</dd>
+                                <dd lay-value="幻想魔族" class="">幻想魔族</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
 
-									<a id="Previous_sgf" class="btn btn-outline-info col-5"
-										onclick="change_sgf(1)">Pre</a>
-									<a id="Next_sgf" class="btn btn-outline-info col-5" onclick="change_sgf(2)">Next</a>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-				<div id="hide_value_mode" style="display: none;">{{mode}}</div>
-			</div>
-
-		</div>
-	</div>
-	<script src="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
-	<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">攻击力</label>
+                    <div class="layui-input-inline">
+                        <input type="text" autocomplete="off" lay-verify="required|number" name="world_atk"
+                            class="layui-input">
+                    </div>
+                </div>
 
 
-	<script src="{% static 'assets/js/main.js' %}"></script>
-	<script src="{% static 'assets/vendors/sweetalert2/sweetalert2.all.min.js' %}"></script>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">守备力</label>
+                    <div class="layui-input-inline">
+                        <input type="text" autocomplete="off" lay-verify="required|number" name="world_def"
+                            class="layui-input">
+                    </div>
+                </div>
 
-</body>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-filter="world-add-card" lay-submit="">添加</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重新填写</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="layui-container" style="margin-top: 20px;">
+    <div class="layui-row">
+        <div class="layui-col-md10 layui-col-md-offset1">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <select id="beginCard" class="form-select" onchange="searchCards(1)">
+                        <option value="creature">Creature</option>
+                        <option value="spell">Spell</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <select id="endCard" class="form-select" onchange="searchCards(2)">
+                        <option value="common">Common</option>
+                        <option value="rare">Rare</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+
+            </div>
+            <div class="row justify-content-center">
+                <button onclick="addCard()" class="btn btn-outline-primary col-md-2">新增卡牌</button>
+                <button onclick="importDeck()" class="btn btn-outline-primary col-md-2">导入套牌</button>
+                <button onclick="exportDeck()" class="btn btn-outline-primary col-md-2">导出套牌</button>
+                <button onclick="viewCards()" class="btn btn-outline-primary col-md-2">查看属性</button>
+                <!-- <button onclick="searchCards(2)" class="btn btn-outline-primary col-md-2">开始计算</button> -->
+            </div>
+            <div class="layui-row" id="world_result" style="display: none; margin-bottom: 25px;">
+                <div class="layui-col-md12">
+                    <div id="ID-tree-demo-accordion">
+                        <div class="layui-tree layui-tree-line" lay-filter="LAY-tree-1">
+                            <div class="layui-tree-emptyText">无数据</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Lists -->
+            <div class="row">
+                <!-- 备选卡牌 -->
+                <div class="col-md-6">
+                    <h4>备选卡牌</h4>
+                    <div class="card-list-container">
+                        <select id="cardList" class="form-select" size="12">
+                            <!-- Display cards here -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 当前卡牌 -->
+                <div class="col-md-6">
+                    <h4>当前卡牌</h4>
+                    <div class="card-list-container">
+                        <select id="deckList" class="form-select" size="12">
+                            <!-- Display deck cards here -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<script src="./vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="./js/jquery-3.6.0.min.js"></script>
+
+
+<!-- <script src="./js/main.js"></script> -->
+<script src="./vendors/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="./layui/layui.js"></script>
+
+<script src="./small-world.js"></script>
+
 
 
 </html>
-
-<script>
-	var move_show_flag = false;
-	function show_hind() {
-		var move_show_button = document.getElementById("move_show");
-		if (move_show_button) {
-			if (move_show_flag) {
-				move_show_button.innerHTML = "Show Moves";
-				move_show_flag = false;
-			} else {
-				move_show_button.innerHTML = "Close Moves";
-				move_show_flag = true;
-			}
-			showPan();
-		}
-	}
-
-	var sgf_open_end_flag = true;
-	function open_sgf() {
-		if (sgf_open_end_flag) {
-			sgf_open_end_flag = false;
-			$.ajax({
-				type: "GET",
-				url: "../open_sgf",    //后台处理函数的url
-				success: function (result) {  //获取后台处理后传过来的result 
-					if (typeof result === 'string') {
-						Swal.fire({
-							icon: 'error',
-							title: 'Oops...',
-							text: result,
-						})
-					}
-					else {
-						pan = result.pan;
-						ori_caption = result.caption;
-						var filename = result.filename;
-						var total_info = result.total_info;
-						if (result.change_player_flag == 1) {
-							change_player = true;
-						}
-						else {
-							change_player = false;
-						}
-						//需要创建独立副本init_pan
-						init_pan = Array.from(pan, row => [...row]);
-						move_count = 0;
-						move_record = [];
-
-						showPan();
-						document.getElementById('caption').innerHTML = ori_caption;
-						document.getElementById('sgf_filename').innerHTML = filename;
-						if (total_info != "NULL") {
-							document.getElementById('total_info').innerHTML = total_info;
-						}
-
-
-						shadow_stack = [];  //回退栈赋空
-						caption_stack = [];
-						caption_stack.push(document.getElementById('caption').innerHTML);
-						if (sgf_show_flag) {
-							document.getElementById('sgf_information').innerHTML = '<div class="card-body"></div>';
-							$.ajax({
-								type: "GET",
-								url: "../show_information",    //后台处理函数的url
-								success: function (result) {  //获取后台处理后传过来的result 
-									if (result != "Error") {
-										document.getElementById('sgf_information').innerHTML = result;
-										sgf_show_flag = true;
-										var nodes = document.getElementsByTagName('stepnode');
-										if (nodes) {
-											for (var i = 0; i < nodes.length; i++) {
-												nodes[i].addEventListener('click', function () {
-
-													var ancestors = findAncestors(this);
-													go_steps(ancestors);
-												});
-											}
-										}
-									}
-
-								},
-							});
-						}
-						sgf_open_end_flag = true;
-					}
-
-				},
-			});
-		}
-
-	}
-
-	function open_last_file() {
-		$.ajax({
-			type: "GET",
-			url: "../open_last_file",    //后台处理函数的url
-			success: function (result) {  //获取后台处理后传过来的result 
-				if (typeof result !== 'string') {
-					pan = result.pan;
-					ori_caption = result.caption;
-					var filename = result.filename;
-					var total_info = result.total_info;
-					if (result.change_player_flag == 1) {
-						change_player = true;
-					}
-					else {
-						change_player = false;
-					}
-					//需要创建独立副本init_pan
-					init_pan = Array.from(pan, row => [...row]);
-					move_count = 0;
-					move_record = [];
-
-					showPan();
-					document.getElementById('caption').innerHTML = ori_caption;
-					document.getElementById('sgf_filename').innerHTML = filename;
-					if (total_info != "NULL") {
-						document.getElementById('total_info').innerHTML = total_info;
-					}
-
-
-					shadow_stack = [];  //回退栈赋空
-					caption_stack = [];
-					caption_stack.push(document.getElementById('caption').innerHTML);
-
-				}
-
-			},
-		});
-	}
-
-	// 两矩阵完全一致
-	function areArraysEqual(arr1, arr2) {
-		if (arr1.length !== arr2.length) {
-			return false;
-		}
-
-		for (var i = 0; i < arr1.length; i++) {
-			if (arr1[i].length !== arr2[i].length) {
-				return false;
-			}
-
-			for (var j = 0; j < arr1[i].length; j++) {
-				if (arr1[i][j] !== arr2[i][j]) {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-	function back_step() {
-		if (move_record.length > 0) {
-			var mode = document.getElementById('hide_value_mode').innerHTML;
-			if (shadow_stack.length > 0) {
-				var previous_pan = shadow_stack.pop();
-				if (mode !== "1" && areArraysEqual(pan, error_pan)) {
-					$.ajax({
-						type: "GET",
-						url: "../back_step",    //后台处理函数的url
-						success: function (result) {  //获取后台处理后传过来的result 
-
-						},
-					});
-					error_pan = Array.from(previous_pan, row => [...row]);
-				}
-				pan = Array.from(previous_pan, row => [...row]);
-				if (caption_stack.length > 0) {
-					var caption = caption_stack.pop();
-					if (caption_stack.length > 0) {
-						document.getElementById('caption').innerHTML = caption_stack[caption_stack.length - 1];
-					}
-				}
-
-				move_record.pop()
-				move_count = move_count - 1;
-				showPan();
-			}
-		}
-		bold_node();
-	}
-
-	show_label_flag = false;
-	function show_label() {
-		var show_label_button = document.getElementById("show_label_button");
-		if (show_label_flag) {
-			show_label_button.innerHTML = "Show Labels";
-			show_label_flag = false;
-			showPan();
-		} else {
-			show_label_button.innerHTML = "Close Labels";
-			show_label_flag = true;
-			showPan();
-		}
-	}
-
-	function restart_sgf() {
-		return new Promise(function (resolve, reject) {
-			$.ajax({
-				type: "GET",
-				url: "../restart_sgf",
-				success: function (result) {
-					// 执行重置操作
-					pan = Array.from(init_pan, row => [...row]);
-					error_pan = error_pan.map(row => row.map(() => 0));
-					move_count = 0;
-					move_record = [];
-					showPan();
-					shadow_stack = [];  //回退栈赋空
-					caption_stack = [];
-					document.getElementById('caption').innerHTML = ori_caption;
-					caption_stack.push(ori_caption);
-					var nodes = document.getElementsByTagName('stepnode');
-					if (nodes) {
-						for (var i = 0; i < nodes.length; i++) {
-							nodes[i].style.fontWeight = '';
-						}
-					}
-					// 标记Promise为已解决
-					resolve();
-				},
-			});
-		});
-	}
-
-	function findAncestors(element) {
-		var ancestors = [];
-		var parent;
-		while (element.parentNode) {
-			parent = element.parentNode;
-			if (parent && parent.tagName === 'UL') {
-				var parentIndex = Array.prototype.indexOf.call(parent.parentNode.children, parent) - 1;
-				if (parentIndex >= 0) {
-					var parentSibling = parent.parentNode.children[parentIndex];
-					ancestors = ancestors.concat(getSiblings(parentSibling));
-				}
-			}
-			if (parent && parent.tagName === 'LI') {
-				var siblings = findSiblings(element);
-				if (siblings.length > 0) {
-					ancestors = ancestors.concat(siblings);
-				}
-			}
-
-			element = element.parentNode;
-		}
-
-		return ancestors.reverse();
-	}
-
-	function dfs_search(row, col, sgf_information) {
-		var children = sgf_information[0].children;
-		if (children && children.length) {
-			if (parent && parent.tagName === 'UL') {
-				var parentIndex = Array.prototype.indexOf.call(parent.parentNode.children, parent) - 1;
-				if (parentIndex >= 0) {
-					var parentSibling = parent.parentNode.children[parentIndex];
-					ancestors = ancestors.concat(getSiblings(parentSibling));
-				}
-			}
-			if (parent && parent.tagName === 'LI') {
-				var siblings = findSiblings(element);
-				if (siblings.length > 0) {
-					ancestors = ancestors.concat(siblings);
-				}
-			}
-		}
-	}
-
-	//处理坐标
-	function process_label(element_list) {
-		var list = [];
-		var all_list = [];
-		for (var i = 0; i < element_list.length; i++) {
-			var text = element_list[i].innerHTML;
-			var regex = /[WB]\((\d+),(\d+)\)/; // 正则表达式匹配 [W|B](数字,数字)
-			var matches = nodes[i].match(regex);
-
-			if (matches && matches.length === 3) {
-				var x = parseInt(matches[1]);
-				var y = parseInt(matches[2]);
-				list.append(x);
-				list.append(y);
-				all_list.append(list);
-			}
-		}
-		return all_list;
-	}
-
-	function bold_node() {
-		var sgf_information = document.getElementById('sgf_information').children[0].children;
-		if (sgf_information && sgf_information.length) {
-			var nodes = document.getElementsByTagName('stepnode');
-			var suspected_array = []; // 可疑顶点集合
-			var paths = [];  // 路径集
-
-			for (var i = 0; i < nodes.length; i++) {
-				nodes[i].style.fontWeight = '';
-			}
-
-			if (move_record.length) {
-				var last_row = move_record[move_record.length - 1][0] + 1;
-				var last_col = move_record[move_record.length - 1][1] + 1;
-				for (var i = 0; i < nodes.length; i++) {
-					var regex = /[WB]\((\d+),(\d+)\)/; // 正则表达式匹配 [W|B](数字,数字)
-					var matches = nodes[i].innerHTML.match(regex);
-					nodes[i].style.fontWeight = '';
-					if (matches && matches.length === 3) {
-						var x = parseInt(matches[1]);
-						var y = parseInt(matches[2]);
-						if (x == last_row && y == last_col) {
-							suspected_array.push(nodes[i])
-						}
-					}
-				}
-			}
-
-			if (suspected_array.length) {
-				for (var i = 0; i < suspected_array.length; i++) {
-					var ancestors = findAncestors(suspected_array[i]);
-					if (ancestors.length == move_record.length) {
-						paths.push(ancestors);
-					}
-
-				}
-			}
-
-			if (paths.length) {
-				var jump_flag = false;
-				var find_flag = false;
-				for (var j = 0; j < paths.length; j++) {
-					for (var i = 0; i < move_record.length; i++) {
-						var row = move_record[i][0] + 1;
-						var col = move_record[i][1] + 1;
-						var path = paths[j];
-						var matches = path[i].innerHTML.match(/\((\d+),(\d+)\)/);
-						if (matches && matches.length === 3) {
-							var x = parseInt(matches[1]);
-							var y = parseInt(matches[2]);
-						}
-						if (row != x || col != y) {
-							jump_flag = true;
-							break;
-						}
-						if (i == move_record.length - 1) {
-							find_flag = true;
-							path[i].style.fontWeight = 'bold';
-							break;
-						}
-					}
-					if (jump_flag) {
-						jump_flag = false;
-						continue;
-					}
-					if (find_flag) {
-						break;
-					}
-				}
-
-			}
-
-		}
-	}
-
-	function findSiblings(element) {
-		var siblings = [];
-		var parent = element.parentNode;
-
-		if (parent) {
-			var children = parent.children;
-			var index = Array.prototype.indexOf.call(children, element);
-
-			for (var i = index; i >= 0; i--) {
-				var child = children[i];
-				if (child.tagName === 'STEPNODE') {
-					siblings.push(child);
-				}
-			}
-		}
-
-		return siblings;
-	}
-
-	function sendAjaxRequest(player, col, row, ancestors) {
-		return new Promise(function (resolve, reject) {
-			$.ajax({
-				type: "GET",
-				url: "../down_step",
-				data: { 'player': player, 'col': col, 'row': row, 'mode': "2" },
-				success: function (result) {
-					if (typeof result === 'string') {
-						if (result.includes("RIGHT")) {
-							document.getElementById('caption').innerHTML = '<span style="color: green;">正确！</span>';
-						}
-						else {
-							document.getElementById('caption').innerHTML = result;
-						}
-					}
-					else {
-						var x_auto = result.row;
-						var y_auto = result.col;
-						var caption = result.caption;
-						if (caption.includes("RIGHT")) {
-							document.getElementById('caption').innerHTML = '<span style="color: green;">正确！</span>';
-						}
-						else {
-							document.getElementById('caption').innerHTML = caption;
-						}
-					}
-					caption_stack.push(document.getElementById('caption').innerHTML)
-					error_pan = Array.from(pan, row => [...row]);
-					bold_node();
-					resolve(); // 解析 Promise
-				},
-			});
-		});
-	}
-
-	async function processAncestors(ancestors) {
-		for (var i = 0; i < ancestors.length; i++) {
-			var matches = ancestors[i].innerHTML.match(/\((\d+),(\d+)\)/);
-			if (matches && matches.length === 3) {
-				var x = parseInt(matches[1]);
-				var y = parseInt(matches[2]);
-				play(x - 1, y - 1, move_count);
-				var player = 'B';
-				if (change_player) {
-					player = 'W';
-				}
-				if (move_count % 2 === 0) { // 未落子前是白
-					if (change_player) {
-						player = 'B';
-					}
-					else {
-						player = 'W';
-					}
-				}
-				await sendAjaxRequest(player, x - 1, y - 1, ancestors);
-			}
-		}
-		showPan();
-	}
-	async function go_steps(ancestors) {
-		if (ancestors.length > 0) {
-			restart_sgf().then(function () {
-				processAncestors(ancestors);
-			});
-		}
-	}
-
-	function getSiblings(element) {
-		var siblings = [];
-
-		if (element) {
-			var children = element.children;
-
-			for (var i = children.length - 1; i >= 0; i--) {
-				var child = children[i];
-				if (child.tagName === 'STEPNODE') {
-					siblings.push(child);
-				}
-			}
-		}
-
-		return siblings;
-	}
-	var sgf_show_flag = false;
-	function show_information() {
-		if (sgf_show_flag) {
-			document.getElementById('sgf_information').innerHTML = '<div class="card-body"></div>';
-			document.getElementById("show_information").innerHTML = "Show Nodes";
-			sgf_show_flag = false;
-		}
-		else {
-			$.ajax({
-				type: "GET",
-				url: "../show_information",    //后台处理函数的url
-				success: function (result) {  //获取后台处理后传过来的result 
-					if (result != "Error") {
-						document.getElementById('sgf_information').innerHTML = result;
-						sgf_show_flag = true;
-						var nodes = document.getElementsByTagName('stepnode');
-						if (nodes) {
-							for (var i = 0; i < nodes.length; i++) {
-								nodes[i].addEventListener('click', function () {
-									var ancestors = findAncestors(this);
-									go_steps(ancestors);
-								});
-							}
-						}
-						bold_node();
-						document.getElementById("show_information").innerHTML = "Close Nodes";
-					}
-
-				},
-			});
-		}
-
-	}
-
-	//自由对弈（最简单）
-	function free_fire() {
-		document.getElementById('menu_1').classList.add('active');
-		document.getElementById('menu_2').classList.remove('active');
-		document.getElementById('menu_3').classList.remove('active');
-
-		var button_text = `<a id="move_show" class="btn btn-outline-primary col-12" onclick="show_hind()">Show
-								Moves</a>
-							<a id="show_label_button" class="btn btn-outline-primary col-12"
-								onclick="show_label()">Show Label</a>
-							<a id="back_step_button" class="btn btn-outline-primary col-12"
-								onclick="back_step()">Go Back One</a>
-							<a id="restart_button" class="btn btn-outline-primary col-12"
-								onclick="restart_sgf()">Restart All</a>`
-		sgf_show_flag = false;
-		document.getElementById('button_list').innerHTML = button_text;
-		if (move_show_flag) {
-			document.getElementById("move_show").innerHTML = "Close Moves";
-		}
-		if (show_label_flag) {
-			document.getElementById("show_label_button").innerHTML = "Close Label";
-		}
-		$.ajax({
-			type: "GET",
-			url: "../save_mode",    //后台处理函数的url
-			data: { "mode": 1 },
-			success: function (result) {  //获取后台处理后传过来的result 
-
-			},
-		});
-		$.ajax({
-			type: "GET",
-			url: "../clean_sgf",    //后台处理函数的url
-			success: function (result) {  //获取后台处理后传过来的result 
-
-			},
-		});
-		pan = pan.map(row => row.map(() => 0));
-		init_pan = init_pan.map(row => row.map(() => 0));
-		move_count = 0;
-		move_record = [];
-		showPan();
-		shadow_stack = [];
-		shadow_stack = [];
-		document.getElementById('caption').innerHTML = "&nbsp;";
-		document.getElementById('sgf_information').innerHTML = '<div class="card-body"></div>';
-		document.getElementById('hide_value_mode').innerHTML = "1";
-		var change_sgf_text = `<h5 class="card-title" id="sgf_filename"></h5>
-							<h5 class="card-title" id="total_info"></h5>`
-		document.getElementById('change_sgf_card').innerHTML = change_sgf_text;
-	}
-
-	function sgf_mode() {
-		document.getElementById('menu_1').classList.remove('active');
-		document.getElementById('menu_2').classList.add('active');
-		document.getElementById('menu_3').classList.remove('active');
-
-		var button_text = `<a id="open_sgf_button" class="btn btn-outline-primary col-12"
-								onclick="open_sgf()">Open File</a>
-							<a id="move_show" class="btn btn-outline-primary col-12" onclick="show_hind()">Show
-								Moves</a>
-							<a id="show_label_button" class="btn btn-outline-primary col-12"
-								onclick="show_label()">Show Label</a>
-							<a id="show_information" class="btn btn-outline-primary col-12"
-								onclick="show_information()">Show Nodes</a>
-							<a id="back_step_button" class="btn btn-outline-primary col-12"
-								onclick="back_step()">Go Back One</a>
-							<a id="restart_button" class="btn btn-outline-primary col-12"
-								onclick="restart_sgf()">Restart All</a>`
-		document.getElementById('button_list').innerHTML = button_text;
-		if (move_show_flag) {
-			document.getElementById("move_show").innerHTML = "Close Moves";
-		}
-		if (show_label_flag) {
-			document.getElementById("show_label_button").innerHTML = "Close Label";
-		}
-		if (sgf_show_flag) {
-			document.getElementById("show_information").innerHTML = "Close Nodes";
-		}
-		$.ajax({
-			type: "GET",
-			url: "../save_mode",    //后台处理函数的url
-			data: { "mode": 2 },
-			success: function (result) {  //获取后台处理后传过来的result 
-
-			},
-		});
-		restart_sgf();
-		document.getElementById('hide_value_mode').innerHTML = "2";
-		var change_sgf_text = `<h5 class="card-title" id="sgf_filename"></h5>
-							<h5 class="card-title" id="total_info"></h5>
-							<a id="Previous_sgf" class="btn btn-outline-info col-5"
-								onclick="change_sgf(1)">Pre</a>
-							<a id="Next_sgf" class="btn btn-outline-info col-5" onclick="change_sgf(2)">Next</a>`
-		document.getElementById('change_sgf_card').innerHTML = change_sgf_text;
-		open_last_file();
-	}
-
-	function homework_mode() {
-		document.getElementById('menu_1').classList.remove('active');
-		document.getElementById('menu_2').classList.remove('active');
-		document.getElementById('menu_3').classList.add('active');
-
-		var button_text = `<a id="open_sgf_button" class="btn btn-outline-primary col-12"
-								onclick="open_sgf()">Open File</a>
-							<a id="move_show" class="btn btn-outline-primary col-12" onclick="show_hind()">Show
-								Moves</a>
-							<a id="show_label_button" class="btn btn-outline-primary col-12"
-								onclick="show_label()">Show Label</a>
-							<a id="show_information" class="btn btn-outline-primary col-12"
-								onclick="show_information()">Show Nodes</a>
-							<a id="back_step_button" class="btn btn-outline-primary col-12"
-								onclick="back_step()">Go Back One</a>
-							<a id="restart_button" class="btn btn-outline-primary col-12"
-								onclick="restart_sgf()">Restart All</a>`
-
-		document.getElementById('button_list').innerHTML = button_text;
-		if (move_show_flag) {
-			document.getElementById("move_show").innerHTML = "Close Moves";
-		}
-		if (show_label_flag) {
-			document.getElementById("show_label_button").innerHTML = "Close Label";
-		}
-		if (sgf_show_flag) {
-			document.getElementById("show_information").innerHTML = "Close Nodes";
-		}
-		$.ajax({
-			type: "GET",
-			url: "../save_mode",    //后台处理函数的url
-			data: { "mode": 3 },
-			success: function (result) {  //获取后台处理后传过来的result 
-
-			},
-		});
-		restart_sgf();
-		document.getElementById('hide_value_mode').innerHTML = "3";
-		var change_sgf_text = `<h5 class="card-title" id="sgf_filename"></h5>
-							<h5 class="card-title" id="total_info"></h5>
-
-							<a id="Previous_sgf" class="btn btn-outline-info col-5"
-								onclick="change_sgf(1)">Pre</a>
-							<a id="Next_sgf" class="btn btn-outline-info col-5" onclick="change_sgf(2)">Next</a>`
-		document.getElementById('change_sgf_card').innerHTML = change_sgf_text;
-		open_last_file();
-	}
-
-	function change_sgf(flag) {
-		$.ajax({
-			type: "GET",
-			url: "../change_sgf",    //后台处理函数的url
-			data: { "flag": flag },
-			success: function (result) {  //获取后台处理后传过来的result 
-				if (typeof result !== 'string') {
-					pan = result.pan;
-					ori_caption = result.caption;
-					var filename = result.filename;
-					var total_info = result.total_info;
-					if (result.change_player_flag == 1) {
-						change_player = true;
-					}
-					else {
-						change_player = false;
-					}
-					//需要创建独立副本init_pan
-					init_pan = Array.from(pan, row => [...row]);
-					move_count = 0;
-					move_record = [];
-
-					showPan();
-					document.getElementById('caption').innerHTML = ori_caption;
-					document.getElementById('sgf_filename').innerHTML = filename;
-					if (total_info != "NULL") {
-						document.getElementById('total_info').innerHTML = total_info;
-					}
-
-
-					shadow_stack = [];  //回退栈赋空
-					caption_stack = [];
-					caption_stack.push(document.getElementById('caption').innerHTML);
-					if (sgf_show_flag) {
-						document.getElementById('sgf_information').innerHTML = '<div class="card-body"></div>';
-						$.ajax({
-							type: "GET",
-							url: "../show_information",    //后台处理函数的url
-							success: function (result) {  //获取后台处理后传过来的result 
-								if (result != "Error") {
-									document.getElementById('sgf_information').innerHTML = result;
-									sgf_show_flag = true;
-									var nodes = document.getElementsByTagName('stepnode');
-									if (nodes) {
-										for (var i = 0; i < nodes.length; i++) {
-											nodes[i].addEventListener('click', function () {
-												// var id = this.getAttribute("id");
-												// console.log("Clicked stepnode ID:", id);
-
-												var ancestors = findAncestors(this);
-												go_steps(ancestors);
-											});
-										}
-									}
-								}
-
-							},
-						});
-					}
-				}
-
-			},
-		});
-
-	}
-	var mode = document.getElementById('hide_value_mode').innerHTML;
-	switch (mode) {
-		case "1":
-			free_fire();
-			break;
-		case "2":
-			sgf_mode();
-			break;
-		case "3":
-			homework_mode();
-			break;
-		default: break;
-	}
-
-
-</script>
